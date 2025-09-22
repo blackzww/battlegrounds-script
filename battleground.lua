@@ -1,8 +1,19 @@
+-- ============================================================
+-- SwastiKa Hub
+-- Interface criada com WindUI
+-- Autor: blackzw and my bitch :3
+-- ============================================================
+
+-- Carregar a library WindUI
 local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/latest/download/main.lua"))()
 
+-- Configurações globais da UI
 WindUI:SetFont("rbxassetid://12187373327")
 WindUI:SetTheme("Dark")
 
+-- ============================================================
+-- Criação da janela principal
+-- ============================================================
 local Window = WindUI:CreateWindow({
     Title = "SwastiKa Hub",
     Icon = "house",
@@ -22,11 +33,12 @@ local Window = WindUI:CreateWindow({
         Enabled = true,
         Anonymous = false,
         Callback = function()
-            print("clicked")
+            print("Botão de usuário clicado")
         end,
     },
 })
 
+-- Botão que abre a UI minimizada
 Window:EditOpenButton({
     Title = "SwastiKa Minimized",
     Icon = "monitor",
@@ -41,34 +53,44 @@ Window:EditOpenButton({
     Draggable = true,
 })
 
+-- Remover botões desnecessários do topo
 Window:DisableTopbarButtons({
     "Fullscreen",
 })
 
--- ========== EXEMPLO DE ABAS ==========
+-- ============================================================
+-- Abas principais da interface
+-- ============================================================
 local TabMain = Window:Tab({
     Title = "Main",
     Icon = "archive",
     Locked = false
-)}
+})
+
 local TabUniversal = Window:Tab({
     Title = "Universal",
     Icon = "archive",
     Locked = false
-    
 })
+
 local TabConfig = Window:Tab({
     Title = "Config",
     Icon = "settings",
     Locked = false
 })
+
 local TabCredit = Window:Tab({
     Title = "Credits",
     Icon = "info",
     Locked = false
 })
 
--- ========== ELEMENTOS NA ABA MAIN ==========
+-- ============================================================
+-- Aba: Main
+-- Elementos básicos de interação
+-- ============================================================
+
+-- Botão simples
 TabMain:Button({
     Title = "Clique aqui",
     Callback = function()
@@ -76,6 +98,7 @@ TabMain:Button({
     end,
 })
 
+-- Toggle (liga/desliga)
 TabMain:Toggle({
     Title = "Ativar função",
     Default = false,
@@ -84,6 +107,7 @@ TabMain:Toggle({
     end,
 })
 
+-- Slider (controle deslizante)
 TabMain:Slider({
     Title = "Volume",
     Min = 0,
@@ -94,6 +118,7 @@ TabMain:Slider({
     end,
 })
 
+-- Caixa de texto
 TabMain:TextBox({
     Title = "Digite algo",
     Placeholder = "Escreva aqui...",
@@ -102,6 +127,7 @@ TabMain:TextBox({
     end,
 })
 
+-- Dropdown (menu suspenso)
 TabMain:Dropdown({
     Title = "Escolha uma opção",
     Values = {"Opção 1", "Opção 2", "Opção 3"},
@@ -111,19 +137,23 @@ TabMain:Dropdown({
     end,
 })
 
--- ======= ELEMENTOS NA ABA UNIVERSAL =========
+-- ============================================================
+-- Aba: Universal
+-- Aimbot simples com trava de câmera
+-- ============================================================
+
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local LocalPlayer = Players.LocalPlayer
 local Camera = workspace.CurrentCamera
 
--- Limite de distância para considerar "próximo"
+-- Distância máxima para travar no inimigo
 local DIST_LIMIT = 25
 
--- Guarda a conexão do aimbot
+-- Conexão usada para ativar/desativar o aimbot
 local aimbotConn = nil
 
--- Função para achar o jogador/humanoid mais próximo dentro do limite
+-- Função: retorna o jogador mais próximo
 local function getClosest()
     local minDist = DIST_LIMIT
     local closestChar = nil
@@ -132,7 +162,12 @@ local function getClosest()
     if not myRoot then return nil end
 
     for _, p in ipairs(Players:GetPlayers()) do
-        if p ~= LocalPlayer and p.Character and p.Character:FindFirstChild("HumanoidRootPart") and p.Character:FindFirstChild("Humanoid") and p.Character.Humanoid.Health > 0 then
+        if p ~= LocalPlayer 
+        and p.Character 
+        and p.Character:FindFirstChild("HumanoidRootPart") 
+        and p.Character:FindFirstChild("Humanoid") 
+        and p.Character.Humanoid.Health > 0 then
+
             local dist = (myRoot.Position - p.Character.HumanoidRootPart.Position).Magnitude
             if dist < minDist then
                 minDist = dist
@@ -143,7 +178,7 @@ local function getClosest()
     return closestChar
 end
 
--- Função de travar a câmera na pessoa mais próxima
+-- Função: trava a câmera no inimigo mais próximo
 local function lockCamera()
     local myChar = LocalPlayer.Character
     local myHead = myChar and myChar:FindFirstChild("Head")
@@ -154,7 +189,7 @@ local function lockCamera()
     end
 end
 
--- Toggle do TabUniversal
+-- Toggle para ligar/desligar o aimbot
 TabUniversal:Toggle({
     Title = "Aimbot",
     Default = false,
@@ -172,8 +207,10 @@ TabUniversal:Toggle({
     end,
 })
 
--- ========== ELEMENTOS NA ABA CONFIG ==========
-
+-- ============================================================
+-- Aba: Config
+-- Botões de configuração
+-- ============================================================
 TabConfig:Button({
     Title = "Salvar Config",
     Callback = function()
@@ -181,19 +218,24 @@ TabConfig:Button({
     end,
 })
 
--- ========== ELEMENTOS NA ABA SOBRE ==========
+-- ============================================================
+-- Aba: Credits
+-- Créditos e notificações
+-- ============================================================
 TabCredit:Button({
     Title = "Credits",
     Callback = function()
         WindUI:Notify({
             Title = "Credits",
-            Content = "by blackzw e and my bitch :3",
+            Content = "by blackzw and my bitch :3",
             Time = 6,
         })
     end,
 })
 
--- ========== NOTIFICAÇÃO DE EXEMPLO ==========
+-- ============================================================
+-- Notificação inicial
+-- ============================================================
 WindUI:Notify({
     Title = "Aviso",
     Content = "Sua ação foi concluída com sucesso!",
