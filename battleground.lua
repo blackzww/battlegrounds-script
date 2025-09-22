@@ -5,11 +5,9 @@ WindUI:SetTheme("Dark")
 
 local Window = WindUI:CreateWindow({
     Title = "SwastiKa Hub",
-    Icon = "house", -- lucide icon
+    Icon = "house",
     Author = "by blackzw and a my bitch :3",
     Folder = "SwastiKa",
-    
-    -- ↓ This all is Optional. You can remove it.
     Size = UDim2.fromOffset(580, 460),
     MinSize = Vector2.new(560, 350),
     MaxSize = Vector2.new(850, 560),
@@ -20,7 +18,6 @@ local Window = WindUI:CreateWindow({
     BackgroundImageTransparency = 0.42,
     HideSearchBar = true,
     ScrollBarEnabled = false,
-    
     User = {
         Enabled = true,
         Anonymous = false,
@@ -36,7 +33,7 @@ Window:EditOpenButton({
     CornerRadius = UDim.new(0,16),
     StrokeThickness = 2,
     Color = ColorSequence.new(
-        Color3.fromHex("D40000"), 
+        Color3.fromHex("D40000"),
         Color3.fromHex("BD0000")
     ),
     OnlyMobile = false,
@@ -48,26 +45,32 @@ Window:DisableTopbarButtons({
     "Fullscreen",
 })
 
-local Main = Window:Main({
+-- ========== EXEMPLO DE ABAS ==========
+local TabMain = Window:Tab({
     Title = "Main",
-    Icon = "archive", -- optional
-    Locked = true,
+    Icon = "archive",
+    Locked = false
+})
+local TabConfig = Window:Tab({
+    Title = "Config",
+    Icon = "settings",
+    Locked = false
+})
+local TabSobre = Window:Tab({
+    Title = "Sobre",
+    Icon = "info",
+    Locked = false
 })
 
-Main:Select() -- Select Tab
-
--- =========== TEMPLATES ADICIONADOS ===========
-
--- Botão simples
-Main:Button({
+-- ========== ELEMENTOS NA ABA MAIN ==========
+TabMain:Button({
     Title = "Clique aqui",
     Callback = function()
         print("Botão clicado!")
     end,
 })
 
--- Toggle (interruptor)
-Main:Toggle({
+TabMain:Toggle({
     Title = "Ativar função",
     Default = false,
     Callback = function(state)
@@ -75,8 +78,7 @@ Main:Toggle({
     end,
 })
 
--- Slider (barra deslizante)
-Main:Slider({
+TabMain:Slider({
     Title = "Volume",
     Min = 0,
     Max = 100,
@@ -86,8 +88,7 @@ Main:Slider({
     end,
 })
 
--- TextBox (campo de texto)
-Main:TextBox({
+TabMain:TextBox({
     Title = "Digite algo",
     Placeholder = "Escreva aqui...",
     Callback = function(text)
@@ -95,8 +96,7 @@ Main:TextBox({
     end,
 })
 
--- Dropdown (lista suspensa)
-Main:Dropdown({
+TabMain:Dropdown({
     Title = "Escolha uma opção",
     Values = {"Opção 1", "Opção 2", "Opção 3"},
     Default = 1,
@@ -105,9 +105,37 @@ Main:Dropdown({
     end,
 })
 
--- Notificação de exemplo
+-- ========== ELEMENTOS NA ABA CONFIG ==========
+TabConfig:Toggle({
+    Title = "Modo escuro",
+    Default = true,
+    Callback = function(state)
+        print("Modo escuro:", state)
+    end,
+})
+
+TabConfig:Button({
+    Title = "Salvar Config",
+    Callback = function()
+        print("Configuração salva!")
+    end,
+})
+
+-- ========== ELEMENTOS NA ABA SOBRE ==========
+TabSobre:Button({
+    Title = "Créditos",
+    Callback = function()
+        WindUI:Notify({
+            Title = "Créditos",
+            Content = "by blackzw e a my bitch :3",
+            Time = 6,
+        })
+    end,
+})
+
+-- ========== NOTIFICAÇÃO DE EXEMPLO ==========
 WindUI:Notify({
     Title = "Aviso",
     Content = "Sua ação foi concluída com sucesso!",
-    Time = 5, -- segundos
+    Time = 5,
 })
