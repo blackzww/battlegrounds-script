@@ -28,14 +28,14 @@ local Window = WindUI:CreateWindow({
             print("clicked")
         end,
     },
-}) -- <--- THIS closes the CreateWindow table
+})
 
 Window:EditOpenButton({
     Title = "SwastiKa Minimized",
     Icon = "monitor",
     CornerRadius = UDim.new(0,16),
     StrokeThickness = 2,
-    Color = ColorSequence.new( -- gradient
+    Color = ColorSequence.new(
         Color3.fromHex("D40000"), 
         Color3.fromHex("BD0000")
     ),
@@ -52,4 +52,62 @@ local Main = Window:Main({
     Title = "Main",
     Icon = "archive", -- optional
     Locked = true,
+})
+
+Main:Select() -- Select Tab
+
+-- =========== TEMPLATES ADICIONADOS ===========
+
+-- Botão simples
+Main:Button({
+    Title = "Clique aqui",
+    Callback = function()
+        print("Botão clicado!")
+    end,
+})
+
+-- Toggle (interruptor)
+Main:Toggle({
+    Title = "Ativar função",
+    Default = false,
+    Callback = function(state)
+        print("Toggle está:", state)
+    end,
+})
+
+-- Slider (barra deslizante)
+Main:Slider({
+    Title = "Volume",
+    Min = 0,
+    Max = 100,
+    Default = 50,
+    Callback = function(value)
+        print("Volume em:", value)
+    end,
+})
+
+-- TextBox (campo de texto)
+Main:TextBox({
+    Title = "Digite algo",
+    Placeholder = "Escreva aqui...",
+    Callback = function(text)
+        print("Você digitou:", text)
+    end,
+})
+
+-- Dropdown (lista suspensa)
+Main:Dropdown({
+    Title = "Escolha uma opção",
+    Values = {"Opção 1", "Opção 2", "Opção 3"},
+    Default = 1,
+    Callback = function(selected)
+        print("Selecionou:", selected)
+    end,
+})
+
+-- Notificação de exemplo
+WindUI:Notify({
+    Title = "Aviso",
+    Content = "Sua ação foi concluída com sucesso!",
+    Time = 5, -- segundos
 })
