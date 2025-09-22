@@ -6,7 +6,7 @@ WindUI:SetTheme("Dark")
 local Window = WindUI:CreateWindow({
     Title = "SwastiKa Hub",
     Icon = "house",
-    Author = "by blackzw and a my bitch :3",
+    Author = "by blackzw and my bitch :3",
     Folder = "SwastiKa",
     Size = UDim2.fromOffset(580, 460),
     MinSize = Vector2.new(560, 350),
@@ -50,14 +50,20 @@ local TabMain = Window:Tab({
     Title = "Main",
     Icon = "archive",
     Locked = false
+)}
+local TabUniversal = Window:Tab({
+    Title = "Universal",
+    Icon = "archive",
+    Locked = false
+    
 })
 local TabConfig = Window:Tab({
     Title = "Config",
     Icon = "settings",
     Locked = false
 })
-local TabSobre = Window:Tab({
-    Title = "Sobre",
+local TabCredit = Window:Tab({
+    Title = "Credits",
     Icon = "info",
     Locked = false
 })
@@ -105,14 +111,68 @@ TabMain:Dropdown({
     end,
 })
 
--- ========== ELEMENTOS NA ABA CONFIG ==========
-TabConfig:Toggle({
-    Title = "Modo escuro",
-    Default = true,
+-- ======= ELEMENTOS NA ABA UNIVERSAL =========
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local LocalPlayer = Players.LocalPlayer
+local Camera = workspace.CurrentCamera
+
+-- Limite de distância para considerar "próximo"
+local DIST_LIMIT = 25
+
+-- Guarda a conexão do aimbot
+local aimbotConn = nil
+
+-- Função para achar o jogador/humanoid mais próximo dentro do limite
+local function getClosest()
+    local minDist = DIST_LIMIT
+    local closestChar = nil
+    local myChar = LocalPlayer.Character
+    local myRoot = myChar and myChar:FindFirstChild("HumanoidRootPart")
+    if not myRoot then return nil end
+
+    for _, p in ipairs(Players:GetPlayers()) do
+        if p ~= LocalPlayer and p.Character and p.Character:FindFirstChild("HumanoidRootPart") and p.Character:FindFirstChild("Humanoid") and p.Character.Humanoid.Health > 0 then
+            local dist = (myRoot.Position - p.Character.HumanoidRootPart.Position).Magnitude
+            if dist < minDist then
+                minDist = dist
+                closestChar = p.Character
+            end
+        end
+    end
+    return closestChar
+end
+
+-- Função de travar a câmera na pessoa mais próxima
+local function lockCamera()
+    local myChar = LocalPlayer.Character
+    local myHead = myChar and myChar:FindFirstChild("Head")
+    local closest = getClosest()
+    if closest and myHead then
+        local targetPos = closest.HumanoidRootPart.Position
+        Camera.CFrame = CFrame.new(Camera.CFrame.Position, targetPos)
+    end
+end
+
+-- Toggle do TabUniversal
+TabUniversal:Toggle({
+    Title = "Aimbot",
+    Default = false,
     Callback = function(state)
-        print("Modo escuro:", state)
+        if state then
+            -- Ativar
+            aimbotConn = RunService.RenderStepped:Connect(lockCamera)
+        else
+            -- Desativar
+            if aimbotConn then
+                aimbotConn:Disconnect()
+                aimbotConn = nil
+            end
+        end
     end,
 })
+
+-- ========== ELEMENTOS NA ABA CONFIG ==========
 
 TabConfig:Button({
     Title = "Salvar Config",
@@ -122,12 +182,12 @@ TabConfig:Button({
 })
 
 -- ========== ELEMENTOS NA ABA SOBRE ==========
-TabSobre:Button({
-    Title = "Créditos",
+TabCredit:Button({
+    Title = "Credits",
     Callback = function()
         WindUI:Notify({
-            Title = "Créditos",
-            Content = "by blackzw e a my bitch :3",
+            Title = "Credits",
+            Content = "by blackzw e and my bitch :3",
             Time = 6,
         })
     end,
