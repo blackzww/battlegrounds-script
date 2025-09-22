@@ -28,6 +28,7 @@ local Window = WindUI:CreateWindow({
             print("clicked")
         end,
     },
+}) -- <--- THIS closes the CreateWindow table
 
 Window:EditOpenButton({
     Title = "SwastiKa Minimized",
